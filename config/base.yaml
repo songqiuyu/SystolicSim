@@ -1,0 +1,41 @@
+# =============================================================
+# Systolic Array SystemC Simulator — Runtime Configuration
+# =============================================================
+# Format: key = value   (# comment lines are ignored)
+# All modules read from this file at startup via Config::load()
+# =============================================================
+
+# ── Systolic Array Physical Size ─────────────────────────────
+pe_rows         = 32          # PE array rows    (must be ≤ MAX_PE_ROWS = 64)
+pe_cols         = 32          # PE array columns (must be ≤ MAX_PE_COLS = 64)
+
+# ── GEMM Matrix Dimensions ───────────────────────────────────
+M               = 512         # Input rows
+K               = 1152        # Input cols / Weight rows (shared dim)
+N               = 1152        # Weight cols / Output cols
+
+# ── Tile Sizes (should match pe_rows / pe_cols) ───────────────
+M_tile          = 512         # M rows processed per tile
+K_tile          = 32          # K elements per tile (= pe_rows)
+N_tile          = 32          # N columns per tile  (= pe_cols)
+
+# ── Clock Frequencies ────────────────────────────────────────
+pe_freq_ghz     = 0.5         # PE compute frequency (GHz), e.g. 0.5 = 500 MHz
+mem_freq_ghz    = 1.6         # DDR command clock (GHz)
+
+# ── Memory ───────────────────────────────────────────────────
+burst_size      = 64          # DRAM burst width (bytes)
+mem_bw_gbps     = 51.2        # Peak bandwidth (GB/s), 4-ch DDR5-3200
+
+# ── Simple Memory Model Parameters ───────────────────────────
+simple_read_latency_ns  = 80.0    # ~40 PE cycles @ 500 MHz
+simple_write_latency_ns = 60.0
+simple_bw_gbps          = 51.2
+
+# ── Memory Backend (NONE / SIMPLE / RAMULATOR) ───────────────
+# Overridden by --mem-mode command-line argument if provided
+mem_mode        = SIMPLE
+
+# ── Ramulator Config File Path ────────────────────────────────
+# (only used when mem_mode = RAMULATOR)
+ramulator_config = config/config_ddr5_4ch.yaml
